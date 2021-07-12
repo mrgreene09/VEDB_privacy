@@ -13,6 +13,10 @@ import numpy as np
 from mtcnn.mtcnn import MTCNN
 import glob
 
+
+input_path = "/*" #path to folder of images. Note, the path must end with /* to actually access the images
+output_path  = "" #path to folder where the blurred images are to be saved
+
 def rect_to_ellipse(x, y, width,  height):
     vert_axis  = round(height/2)
     horz_axis = round(width/2)
@@ -47,7 +51,7 @@ def logical_mask(image, scrambled, mask):
     return newImage
 
 # create list of images
-imageList = glob.glob() # need to put pathway to images here
+imageList = glob.glob(input_path) # need to put pathway to images here
 
 # main loop
 for i in range(len(imageList)):
