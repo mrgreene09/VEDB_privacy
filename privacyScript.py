@@ -79,7 +79,7 @@ for i in range(len(imageList)):
     
     # apply logical masking to each face
     newImage = logical_mask(image, scrambled, mask)
-    
+    newImage = cv2.cvtColor(newImage, cv2.COLOR_RGB2BGR)
     # write new image to disk
     basename = os.path.basename(imageList[i])     #pulls just the basename of the image rather than its path as well
     cv2.imwrite(os.path.join(output_path + new_name+ " "+ basename), newImage) 
