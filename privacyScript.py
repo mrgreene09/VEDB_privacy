@@ -12,10 +12,12 @@ import cv2
 import numpy as np
 from mtcnn.mtcnn import MTCNN
 import glob
+import os
 
 
-input_path = "/*" #path to folder of images. Note, the path must end with /* to actually access the images
-output_path  = "" #path to folder where the blurred images are to be saved
+input_path = "/Users/peterriley/Desktop/Images/*" #set this path your folder of images. Note, the path must end with /* to actually access the images
+output_path  = "/Users/peterriley/Desktop/NewImages/" #path to folder where the blurred images are to be saved
+new_name = "new" #change new to desired text if a custom new file name is desired
 
 def rect_to_ellipse(x, y, width,  height):
     vert_axis  = round(height/2)
@@ -79,8 +81,8 @@ for i in range(len(imageList)):
     newImage = logical_mask(image, scrambled, mask)
     
     # write new image to disk
-    filename = 'new'+imageList[i]
-    cv2.imwrite(filename, newImage)
+    basename = os.path.basename(imageList[i])     #pulls just the basename of the image rather than its path as well
+    cv2.imwrite(os.path.join(output_path + new_name+ " "+ basename), newImage) 
         
 
                       
