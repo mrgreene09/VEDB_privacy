@@ -11,7 +11,7 @@ import imutils
 import numpy as np
 
 # read input image
-img = cv2.imread('/path/to/image')
+img = cv2.imread('/Users/michellegreene/Desktop/car/car.jpg')
 
 # convert to grayscale and apply slight blurring to make edge detection easier
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY) 
@@ -48,12 +48,13 @@ if screenCnt is None:
     print ("No contour detected")
 else:
      detected = 1
+     
+     # use elementwise masking
+     mask = np.zeros(gray.shape, np.uint8)
+     newImage = cv2.drawContours(mask,[screenCnt],0,255,-1,)
+     newImage = cv2.bitwise_and(img, img, mask=mask)
 
-# use elementwise masking
-mask = np.zeros(gray.shape, np.uint8)
-newImage = cv2.bitwise_and(img, img, mask=mask)
-
-# get bounding box coordinates
-(x, y) = np.where(mask == 255)
-(topx, topy) = (np.min(x), np.min(y))
-(bottomx, bottomy) = (np.max(x), np.max(y))
+     # get bounding box coordinates
+     (x, y) = np.where(mask == 255)
+     (topx, topy) = (np.min(x), np.min(y))
+     (bottomx, bottomy) = (np.max(x), np.max(y))
