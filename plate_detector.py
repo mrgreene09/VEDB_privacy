@@ -17,14 +17,21 @@ import blur_functions as bf
 
 def alpd(img, xx, yy, ww, hh):
     roi = img[yy:yy+hh , xx:xx+ww] #extracts just the car rectangle to be analzed
-    
+# =============================================================================
+#     cv2.imshow("Image", roi)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows()
+#     for i in range(4):
+#         cv2.waitKey(1)
+# =============================================================================
+
     # convert to grayscale and apply slight blurring to make edge detection easier
     gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY) 
     gray = cv2.bilateralFilter(gray, 13, 15, 15) 
     
     # use canny filter to find edges
     edged = cv2.Canny(gray, 30, 200)
-    
+   
     # grab the 10 longest contours 
     contours = cv2.findContours(edged.copy(), cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     contours = imutils.grab_contours(contours)
@@ -52,6 +59,10 @@ def alpd(img, xx, yy, ww, hh):
     if screenCnt is None:
         detected = 0
         print ("No contour detected")
+        img[yy:yy+hh , xx:xx+ww] = roi
+        return img
+    
+    
     else:
          detected = 1
          
@@ -76,18 +87,29 @@ def alpd(img, xx, yy, ww, hh):
         
 
          return img #importantly, this function overwrites the frame/image that does in.
+     
+        
 
-img =cv2.imread("cali.jpg")
-
-
-dog = alpd(img, 0 ,0, 1500, 1500)
-
-cv2.imshow("Image", dog)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-for i in range(4):
-    cv2.waitKey(1)
-
+# =============================================================================
+# img =cv2.imread("/Users/peterriley/Desktop/cars.jpg")
+# cv2.imshow("First", img)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+# for i in range(4):
+#     cv2.waitKey(1)
+# 
+# 
+# 
+# #dog = alpd(img, 734 ,258, 521, 450)   #please.jpg
+# #dog = alpd(img, 1295 ,985, 1667, 1260)  #cali
+# dog = alpd(img, 91, 515, 920, 900)
+# cv2.imshow("Image", dog)
+# cv2.waitKey(0)
+# cv2.destroyAllWindows()
+# for i in range(4):
+#     cv2.waitKey(1)
+# 
+# =============================================================================
 
      
      
