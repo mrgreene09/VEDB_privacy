@@ -20,7 +20,7 @@ nmsThreshold= 0.2
 
 
 #name of image
-name = "please.jpg"
+name = "cars.jpg"
 
 
 #### LOAD MODEL
@@ -65,7 +65,7 @@ def findObjects(outputs,img):
             box = bbox[i]
             x, y, w, h = box[0], box[1], box[2], box[3]
             # print(x,y,w,h)
-            #img = aldp.alpd(img, x, y, w, h)    #this line search for the license plate within the rectangle and blur!  
+            img = aldp.alpd(img, x, y, w, h)    #this line search for the license plate within the rectangle and blur!  
             cv2.rectangle(img, (x, y), (x+w,y+h), (255, 0 , 255), 2)
             #cv2.putText(img,f"{classNames[classIds[i]].upper()} {int(confs[i]*100)}%", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 255), 2)
        
