@@ -20,19 +20,19 @@ nmsThreshold= 0.2
 
 
 #name of image
-name = "cars.jpg"
+name = "/Users/peterriley/Desktop/car1.png"
 
 
 #### LOAD MODEL
 ## Coco Names
-classesFile = "coco.names"
+classesFile = "Yolo wieghts and names/coco.names"
 classNames = []
 with open(classesFile, "rt") as f:
     classNames=f.read().strip('\n').split('\n')
 #print(classNames)
 ## Model Files
-modelConfiguration = "yolov3-tiny.cfg"
-modelWeights = "yolov3-tiny.weights"
+modelConfiguration = "Yolo wieghts and names/yolov3-tiny.cfg"
+modelWeights = "Yolo wieghts and names/yolov3-tiny.weights"
 net = cv2.dnn.readNetFromDarknet(modelConfiguration, modelWeights)
 net.setPreferableBackend(cv2.dnn.DNN_BACKEND_OPENCV)
 net.setPreferableTarget(cv2.dnn.DNN_TARGET_CPU)
