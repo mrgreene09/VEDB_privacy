@@ -11,7 +11,7 @@ Showing how to write a grayscale movie in opencv
 import cv2
 
 # hard coding frames per second
-fps = 30
+#fps = 30
 
 # hard coding codec
 fourcc = 'mp4v'
@@ -33,8 +33,13 @@ print('This video is {} by {} pixels'.format(width, height))
 frameCount = vid.get(cv2.CAP_PROP_FRAME_COUNT)
 print('This video has: {} frames'.format(frameCount))
 
+# get FPS
+fps = vid.get(cv2.CAP_PROP_FPS)
+print('This video plays at: {} frames'.format(fps))
+
 # create a video writer object
-writer = cv2.VideoWriter(outputPath, cv2.VideoWriter_fourcc(*fourcc), fps, videoSize)
+writer = cv2.VideoWriter(outputPath, cv2.VideoWriter_fourcc(*fourcc), fps, videoSize, False)
+# Important note: change the last argument to True for color videos
 
 # read in one frame at a time
 count = 0
