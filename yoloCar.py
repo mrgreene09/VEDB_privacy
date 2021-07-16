@@ -20,7 +20,7 @@ nmsThreshold= 0.2
 
 
 #name of image
-name = "/Users/peterriley/Desktop/car1.png"
+name = "/Users/peterriley/Desktop/tv.png"
 
 
 #### LOAD MODEL
@@ -57,18 +57,34 @@ def findObjects(outputs,img):
                 confs.append(float(confidence))
 
     indices = cv2.dnn.NMSBoxes(bbox, confs, confThreshold, nmsThreshold)
-    
+    plate_coords = []
+    screen_coords = []
     for i in indices:
         
         i = i[0]
         if classIds[i] in [2, 3, 5, 7]: #classIds refering to things that might have a license plate
             box = bbox[i]
             x, y, w, h = box[0], box[1], box[2], box[3]
-            # print(x,y,w,h)
-            img = aldp.alpd(img, x, y, w, h)    #this line search for the license plate within the rectangle and blur!  
+           # print(x,y,w,h)
+            plate_coords.append(box)
+              
             cv2.rectangle(img, (x, y), (x+w,y+h), (255, 0 , 255), 2)
             #cv2.putText(img,f"{classNames[classIds[i]].upper()} {int(confs[i]*100)}%", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 255), 2)
-       
+           
+            
+            
+            
+        elif classIds[i] in [62, 63, 67]: #different types of screens
+            box = bbox[i]
+            x, y, w, h = box[0], box[1], box[2], box[3]
+           # print(x,y,w,h)
+            screen_coords.append(box)
+              
+            cv2.rectangle(img, (x, y), (x+w,y+h), (255, 0 , 255), 2)
+            #cv2.putText(img,f"{classNames[classIds[i]].upper()} {int(confs[i]*100)}%", (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 0, 255), 2)
+            
+            
+    return plate_coords, screen_coords
 
 img = cv2.imread(name)
 blob = cv2.dnn.blobFromImage(img, 1 / 255, (whT, whT), [0, 0, 0], 1, crop=False)
@@ -76,10 +92,18 @@ net.setInput(blob)
 layersNames = net.getLayerNames()
 outputNames = [(layersNames[i[0] - 1]) for i in net.getUnconnectedOutLayers()]
 outputs = net.forward(outputNames)
-findObjects(outputs,img)
+plate_coords, screen_coords = findObjects(outputs,img)
 
-cv2.imshow("Image", img)
+if len(plate_coords)>=1:
+    for i in range(len(plate_coords)):
+        magic = aldp.alpd(img, plate_coords[i][0], plate_coords[i][1], plate_coords[i][2], plate_coords[i][3]) 
+else:
+    magic = img
+
+cv2.imshow("ImageZ", magic)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 for i in range(4):
     cv2.waitKey(1)
+    
+#currently only returns screen coords and puts a box around them (no blurring yet)
